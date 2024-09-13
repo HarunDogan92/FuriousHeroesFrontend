@@ -3,6 +3,10 @@ import './App.css'
 import { useEffect, useState } from 'react'
 import Home from './Home'
 import Login from './Login'
+import Navbar from './Navbar'
+import Character from './character/Character'
+import Account from './account/Account'
+import Logout from './account/Logout'
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false)
@@ -35,12 +39,16 @@ function App() {
   return (
     <div className="App">
       <BrowserRouter>
+        <Navbar />
         <Routes>
           <Route
             path="/"
             element={<Home email={email} loggedIn={loggedIn} setLoggedIn={setLoggedIn} />}
           />
           <Route path="/login" element={<Login setLoggedIn={setLoggedIn} setEmail={setEmail} />} />
+          <Route path="/character/Character" element={<Character />} />
+          <Route path="/src/account/Account" element={<Account />} />
+          <Route path="/account/Logout" element={<Logout />} />
         </Routes>
       </BrowserRouter>
     </div>
