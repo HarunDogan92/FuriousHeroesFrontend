@@ -3,13 +3,12 @@ import { useNavigate } from 'react-router-dom'
 import logo from './resources/eule.png'; 
 
 const Home = (props) => {
-  const { loggedIn, email } = props
+  const { loggedIn } = props
   const navigate = useNavigate()
 
   const onButtonClick = () => {
     if (loggedIn) {
-      localStorage.removeItem('user')
-      props.setLoggedIn(false)
+      navigate('/base')
     } else {
       navigate('/login')
     }
@@ -27,9 +26,8 @@ const Home = (props) => {
           className={'inputButton'}
           type="button"
           onClick={onButtonClick}
-          value={loggedIn ? 'Log out' : 'Log in'}
+          value={loggedIn ? 'Go to Base' : 'Log in'}
         />
-        {loggedIn ? <div>Your email address is {email}</div> : <div />}
       </div>
     </div>
   )

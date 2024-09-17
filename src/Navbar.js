@@ -1,22 +1,18 @@
 import { Link, useMatch, useResolvedPath } from "react-router-dom";
 
-export default function Navbar() {
+export default function Navbar(props) {
+  const { loggedIn } = props
   return (
     <nav className="nav">
       <Link to="/" className="site-title">
         <img src="./resources/eule.png" alt="Furious Heroes"></img>
       </Link>
+      {loggedIn === true &&
       <ul>
-        <CustomLink to="/character/Character" className="site-character">
-          Character
-        </CustomLink>
         <CustomLink to="/src/account/Account" className="site-account">
           Account
         </CustomLink>
-        <CustomLink to="/account/Logout" className="site-logout">
-          Logout
-        </CustomLink>
-      </ul>
+      </ul>}
     </nav>
   );
 }

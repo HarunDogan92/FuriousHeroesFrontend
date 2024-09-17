@@ -2,7 +2,8 @@ import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 const Login = (props) => {
-  const [email, setEmail] = useState('')
+  const [emailR, setEmailR] = useState('')
+  const [emailF, setEmailF] = useState('')
   const [usernameL, setUsernameL] = useState('')
   const [passwordL, setPasswordL] = useState('')
   const [usernameR, setUsernameR] = useState('')
@@ -44,12 +45,12 @@ const Login = (props) => {
       return
     }
 
-    if ('' === email) {
+    if ('' === emailR) {
       setEmailError('Please enter your email')
       return
     }
   
-    if (!/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email)) {
+    if (!/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(emailR)) {
       setEmailError('Please enter a valid email')
       return
     }
@@ -69,6 +70,27 @@ const Login = (props) => {
     register()
   }
 
+  const forgotPassword = () => {
+    // Set initial error values to empty
+    setUsernameError('')
+    setEmailError('')
+    setPasswordError('')
+    
+    fetch('http://localhost:8080/api/auth/forgot-password?email=' + emailF, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then((r) => {
+        if (200 === r.status) {
+          r.text().then((r) => window.alert(r))
+        } else {
+          window.alert("Email doesn't exist")
+        }
+      })
+  }
+
   // Call the server API to check if the given email ID already exists
 const register = () => {
     fetch('http://localhost:8080/api/auth/register', {
@@ -76,7 +98,7 @@ const register = () => {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ email, username: usernameR, password: passwordR }),
+      body: JSON.stringify({ email: emailR, username: usernameR, password: passwordR }),
     })
       .then((r) => {
         if (200 === r.status) {
@@ -99,10 +121,10 @@ const register = () => {
       .then((r) => {
         if (200 === r.status) {
           r.json().then((r) => {
-            localStorage.setItem('user', JSON.stringify({ userId: r.userId, token: r.accessToken }))
+            localStorage.setItem('userId', r.userId)
+            localStorage.setItem('token', r.accessToken )
             props.setLoggedIn(true)
-            props.setEmail(email)
-            navigate('/character/Character')
+            navigate('/')
           })
         } else {
           window.alert("Wrong username or password")
@@ -156,9 +178,9 @@ const register = () => {
       <br />
       <div className={'inputContainer'}>
         <input
-          value={email}
+          value={emailR}
           placeholder="Enter your email here"
-          onChange={(ev) => setEmail(ev.target.value)}
+          onChange={(ev) => setEmailR(ev.target.value)}
           className={'inputBox'}
         />
         <label className="errorLabel">{emailError}</label>
@@ -177,6 +199,20 @@ const register = () => {
       <br />
       <div className={'inputContainer'}>
         <input className={'inputButton'} type="button" onClick={registerUser} value={'Register'} />
+      </div>
+      <br />
+      <div className={'inputContainer'}>
+        <input
+          value={emailF}
+          placeholder="Enter your email here"
+          onChange={(ev) => setEmailF(ev.target.value)}
+          className={'inputBox'}
+        />
+        <label className="errorLabel">{emailError}</label>
+      </div>
+      <br />
+      <div className={'inputContainer'}>
+        <input className={'inputButton'} type="button" onClick={forgotPassword} value={'Forgot Password'} />
       </div>
     </div>
   )
