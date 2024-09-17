@@ -1,6 +1,5 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
-import logo from './resources/eule.png'; 
 
 const Character = (props) => {
   const { loggedIn, email } = props
@@ -11,7 +10,7 @@ const Character = (props) => {
       <div className={'titleContainer'}>
         <div>Furious Heroes</div>
       </div>
-      <div><img src={logo} /></div>
+      <div><img src={'eule.png'} alt='Eule'/></div>
       <div>Start your new Adventure!</div>
       <div className={'buttonContainer'}>
         <input

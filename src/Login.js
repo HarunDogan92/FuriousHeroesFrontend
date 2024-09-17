@@ -3,18 +3,47 @@ import { useNavigate } from 'react-router-dom'
 
 const Login = (props) => {
   const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
+  const [usernameL, setUsernameL] = useState('')
+  const [passwordL, setPasswordL] = useState('')
+  const [usernameR, setUsernameR] = useState('')
+  const [passwordR, setPasswordR] = useState('')
   const [emailError, setEmailError] = useState('')
+  const [usernameError, setUsernameError] = useState('')
   const [passwordError, setPasswordError] = useState('')
 
   const navigate = useNavigate()
 
-  const onButtonClick = () => {
+  const loginUser = () => {
     // Set initial error values to empty
+    setUsernameError('')
+    setPasswordError('')
+  
+    // Check if the user has entered both fields correctly
+    if ('' === usernameL) {
+      setUsernameError('Please enter your username')
+      return
+    }
+  
+    if ('' === passwordL) {
+      setPasswordError('Please enter a password')
+      return
+    }
+  
+    logIn(usernameL, passwordL)
+  }
+
+  const registerUser = () => {
+    // Set initial error values to empty
+    setUsernameError('')
     setEmailError('')
     setPasswordError('')
   
     // Check if the user has entered both fields correctly
+    if ('' === usernameR) {
+      setUsernameError('Please enter your username')
+      return
+    }
+
     if ('' === email) {
       setEmailError('Please enter your email')
       return
@@ -25,67 +54,58 @@ const Login = (props) => {
       return
     }
   
-    if ('' === password) {
+    if ('' === passwordR) {
       setPasswordError('Please enter a password')
       return
     }
   
-    if (password.length < 7) {
+    if (passwordR.length < 7) {
       setPasswordError('The password must be 8 characters or longer')
       return
     }
   
     
     // Check if email has an account associated with it
-    checkAccountExists((accountExists) => {
-        // If yes, log in
-        if (accountExists) logIn()
-        // Else, ask user if they want to create a new account and if yes, then log in
-        else if (
-        window.confirm(
-            'An account does not exist with this email address: ' +
-            email +
-            '. Do you want to create a new account?',
-        )
-        ) {
-        logIn()
-        }
-    })
+    register()
   }
 
   // Call the server API to check if the given email ID already exists
-const checkAccountExists = (callback) => {
-    fetch('http://localhost:3080/check-account', {
+const register = () => {
+    fetch('http://localhost:8080/api/auth/register', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ email }),
+      body: JSON.stringify({ email, username: usernameR, password: passwordR }),
     })
-      .then((r) => r.json())
       .then((r) => {
-        callback(r?.userExists)
+        if (200 === r.status) {
+          logIn(usernameR, passwordR)
+        } else {
+          r.text().then((r) => window.alert(r))
+        }
       })
   }
   
   // Log in a user using email and password
-  const logIn = () => {
-    fetch('http://localhost:3080/auth', {
+  const logIn = (username, password) => {
+    fetch('http://localhost:8080/api/auth/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ email, password }),
+      body: JSON.stringify({ username, password }),
     })
-      .then((r) => r.json())
       .then((r) => {
-        if ('success' === r.message) {
-          localStorage.setItem('user', JSON.stringify({ email, token: r.token }))
-          props.setLoggedIn(true)
-          props.setEmail(email)
-          navigate('/')
+        if (200 === r.status) {
+          r.json().then((r) => {
+            localStorage.setItem('user', JSON.stringify({ userId: r.userId, token: r.accessToken }))
+            props.setLoggedIn(true)
+            props.setEmail(email)
+            navigate('/character/Character')
+          })
         } else {
-          window.alert('Wrong email or password')
+          window.alert("Wrong username or password")
         }
       })
   }
@@ -94,6 +114,44 @@ const checkAccountExists = (callback) => {
     <div className={'mainContainer'}>
       <div className={'titleContainer'}>
         <div>Login</div>
+      </div>
+      <br />
+      <div className={'inputContainer'}>
+        <input
+          value={usernameL}
+          placeholder="Enter your username here"
+          onChange={(ev) => setUsernameL(ev.target.value)}
+          className={'inputBox'}
+        />
+        <label className="errorLabel">{usernameError}</label>
+      </div>
+      <br />
+      <div className={'inputContainer'}>
+        <input
+          value={passwordL}
+          type="password"
+          placeholder="Enter your password here"
+          onChange={(ev) => setPasswordL(ev.target.value)}
+          className={'inputBox'}
+        />
+        <label className="errorLabel">{passwordError}</label>
+      </div>
+      <br />
+      <div className={'inputContainer'}>
+        <input className={'inputButton'} type="button" onClick={loginUser} value={'Log in'} />
+      </div>
+      <div className={'titleContainer'}>
+        <div>Register</div>
+      </div>
+      <br />
+      <div className={'inputContainer'}>
+        <input
+          value={usernameR}
+          placeholder="Enter your username here"
+          onChange={(ev) => setUsernameR(ev.target.value)}
+          className={'inputBox'}
+        />
+        <label className="errorLabel">{usernameError}</label>
       </div>
       <br />
       <div className={'inputContainer'}>
@@ -108,16 +166,17 @@ const checkAccountExists = (callback) => {
       <br />
       <div className={'inputContainer'}>
         <input
-          value={password}
+          value={passwordR}
+          type="password"
           placeholder="Enter your password here"
-          onChange={(ev) => setPassword(ev.target.value)}
+          onChange={(ev) => setPasswordR(ev.target.value)}
           className={'inputBox'}
         />
         <label className="errorLabel">{passwordError}</label>
       </div>
       <br />
       <div className={'inputContainer'}>
-        <input className={'inputButton'} type="button" onClick={onButtonClick} value={'Log in'} />
+        <input className={'inputButton'} type="button" onClick={registerUser} value={'Register'} />
       </div>
     </div>
   )

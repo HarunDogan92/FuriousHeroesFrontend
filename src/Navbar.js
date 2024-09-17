@@ -4,7 +4,7 @@ export default function Navbar() {
   return (
     <nav className="nav">
       <Link to="/" className="site-title">
-        <img src="/src/resources/eule.png" alt="eule"></img>
+        <img src="./resources/eule.png" alt="Furious Heroes"></img>
       </Link>
       <ul>
         <CustomLink to="/character/Character" className="site-character">
