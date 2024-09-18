@@ -67,7 +67,7 @@ const Login = (props) => {
   
     
     // Check if email has an account associated with it
-    register()
+    navigate('/character/Character', {state: {username: usernameR, password: passwordR, email: emailR}})
   }
 
   const forgotPassword = () => {
@@ -87,24 +87,6 @@ const Login = (props) => {
           r.text().then((r) => window.alert(r))
         } else {
           window.alert("Email doesn't exist")
-        }
-      })
-  }
-
-  // Call the server API to check if the given email ID already exists
-const register = () => {
-    fetch('http://localhost:8080/api/auth/register', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ email: emailR, username: usernameR, password: passwordR }),
-    })
-      .then((r) => {
-        if (200 === r.status) {
-          logIn(usernameR, passwordR)
-        } else {
-          r.text().then((r) => window.alert(r))
         }
       })
   }

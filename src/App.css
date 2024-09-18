@@ -43,7 +43,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 100vh;
+  height: 80%;
 }
 
 .titleContainer {
@@ -145,4 +145,17 @@
 
 .nav li:hover {
   background-color: #777;
+}
+
+
+[type=radio] { 
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* IMAGE STYLES */
+[type=radio] + img {
+  cursor: pointer;
 }
