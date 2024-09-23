@@ -84,8 +84,9 @@ const Character = (props) => {
             r.json().then((r) => {
               localStorage.setItem('userId', r.userId)
               localStorage.setItem('token', r.accessToken )
+              localStorage.setItem('avatar', r.avatarImage)
               props.setLoggedIn(true)
-              navigate('/')
+              navigate('/character/CharCreated', {state: {avatar : r.avatarImage}})
             })
           } else {
             window.alert("Wrong username or password")

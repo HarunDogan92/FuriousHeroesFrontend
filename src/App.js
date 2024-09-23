@@ -8,6 +8,7 @@ import Character from './character/Character'
 import Account from './account/Account'
 import Logout from './account/Logout'
 import Password from './account/Password'
+import CharCreated from './character/CharCreated'
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false)
@@ -35,7 +36,8 @@ function App() {
             element={<Home loggedIn={loggedIn} setLoggedIn={setLoggedIn} />}
           />
           <Route path="/login" element={<Login setLoggedIn={setLoggedIn} />} />
-          <Route path="/character/Character" element={<Character />} />
+          <Route path="/character/Character" element={<Character setLoggedIn={setLoggedIn} />} />
+          <Route path="/character/CharCreated" element={<CharCreated />} />
           <Route path="/src/account/Account" element={<Account setLoggedIn={setLoggedIn} />} />
           <Route path="/account/Logout" element={<Logout />} />
           <Route path="/account/PasswordReset" element={<Password />} />
