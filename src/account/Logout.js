@@ -2,8 +2,8 @@
 
 export default function Logout() {
   function logout() {
-    sessionStorage.removeItem("token");
-    sessionStorage.removeItem("userId");
+    localStorage.removeItem("token");
+    localStorage.removeItem("userId");
     window.location.reload(false);
   }
   return (

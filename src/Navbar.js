@@ -5,7 +5,7 @@ export default function Navbar(props) {
   return (
     <nav className="nav">
       <Link to="/" className="site-title">
-        <img src="./resources/eule.png" alt="Furious Heroes"></img>
+      <label className="errorLabel">Furious Heroes</label>
       </Link>
       {loggedIn === true &&
       <ul>

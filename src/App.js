@@ -9,6 +9,7 @@ import Account from './account/Account'
 import Logout from './account/Logout'
 import Password from './account/Password'
 import CharCreated from './character/CharCreated'
+import Base from './base/Base'
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false)
@@ -41,6 +42,7 @@ function App() {
           <Route path="/src/account/Account" element={<Account setLoggedIn={setLoggedIn} />} />
           <Route path="/account/Logout" element={<Logout />} />
           <Route path="/account/PasswordReset" element={<Password />} />
+          <Route path="/base" element={<Base />} />
         </Routes>
       </BrowserRouter>
     </div>
